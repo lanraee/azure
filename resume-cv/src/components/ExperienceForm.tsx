@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ExperienceEntry } from "@/lib/types";
 
 export default function ExperienceForm({
@@ -9,7 +10,9 @@ export default function ExperienceForm({
 }) {
   return (
     <form className="admin-card" action={action}>
-      <h2>{entry ? "Edit entry" : "New entry"}</h2>
+      <div className="admin-card-head">
+        <h2>{entry ? "Edit entry" : "New entry"}</h2>
+      </div>
 
       <div className="admin-field">
         <label htmlFor="title">Title</label>
@@ -37,12 +40,7 @@ export default function ExperienceForm({
         />
       </div>
       <div className="admin-field checkbox-row">
-        <input
-          type="checkbox"
-          id="hidden"
-          name="hidden"
-          defaultChecked={entry?.hidden}
-        />
+        <input type="checkbox" id="hidden" name="hidden" defaultChecked={entry?.hidden} />
         <label htmlFor="hidden" style={{ margin: 0, textTransform: "none" }}>
           Hidden (kept in the data but not shown on the live site)
         </label>
@@ -59,9 +57,14 @@ export default function ExperienceForm({
         </label>
       </div>
 
-      <button type="submit" className="admin-btn">
-        {entry ? "Save changes" : "Create entry"}
-      </button>
+      <div className="admin-form-actions">
+        <button type="submit" className="admin-btn">
+          {entry ? "Save changes" : "Create entry"}
+        </button>
+        <Link href="/admin/experience" className="admin-btn secondary">
+          Cancel
+        </Link>
+      </div>
     </form>
   );
 }

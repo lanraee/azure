@@ -1,15 +1,26 @@
 import { getContent } from "@/lib/content";
 import { updateProfile } from "@/lib/actions";
+import SavedBanner from "@/components/SavedBanner";
 
 export const dynamic = "force-dynamic";
 
-export default async function ProfilePage() {
+export default async function ProfilePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ saved?: string }>;
+}) {
   const { profile } = await getContent();
+  const { saved } = await searchParams;
 
   return (
     <form className="admin-card" action={updateProfile}>
-      <h2>Profile</h2>
-      <p className="hint">Header details and the professional profile paragraph.</p>
+      <div className="admin-card-head">
+        <div>
+          <h2>Profile</h2>
+          <p className="hint">Header details and the professional profile paragraph.</p>
+        </div>
+        <SavedBanner show={saved === "1"} />
+      </div>
 
       <div className="admin-field">
         <label htmlFor="name">Name</label>
@@ -41,9 +52,11 @@ export default async function ProfilePage() {
         />
       </div>
 
-      <button type="submit" className="admin-btn">
-        Save changes
-      </button>
+      <div className="admin-form-actions">
+        <button type="submit" className="admin-btn">
+          Save changes
+        </button>
+      </div>
     </form>
   );
 }

@@ -35,6 +35,7 @@ export async function updateProfile(formData: FormData) {
   await saveContent(content);
   revalidatePath("/");
   revalidatePath("/admin/profile");
+  redirect("/admin/profile?saved=1");
 }
 
 export async function updateSkills(formData: FormData) {
@@ -64,6 +65,7 @@ export async function updateSkills(formData: FormData) {
   await saveContent(content);
   revalidatePath("/");
   revalidatePath("/admin/skills");
+  redirect("/admin/skills?saved=1");
 }
 
 export async function updateCertifications(formData: FormData) {
@@ -74,6 +76,7 @@ export async function updateCertifications(formData: FormData) {
   await saveContent(content);
   revalidatePath("/");
   revalidatePath("/admin/certifications");
+  redirect("/admin/certifications?saved=1");
 }
 
 function readExperienceForm(formData: FormData): Omit<ExperienceEntry, "id" | "order" | "hidden"> & {

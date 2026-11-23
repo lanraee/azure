@@ -1,18 +1,29 @@
 import { getContent } from "@/lib/content";
 import { updateSkills } from "@/lib/actions";
+import SavedBanner from "@/components/SavedBanner";
 
 export const dynamic = "force-dynamic";
 
-export default async function SkillsPage() {
+export default async function SkillsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ saved?: string }>;
+}) {
   const { skills } = await getContent();
+  const { saved } = await searchParams;
 
   return (
     <form className="admin-card" action={updateSkills}>
-      <h2>Technical Skills</h2>
-      <p className="hint">
-        One group per box. Edit the group name and its comma-separated tags. Leave a group&apos;s
-        name blank to remove it. Add a new group using the box at the bottom.
-      </p>
+      <div className="admin-card-head">
+        <div>
+          <h2>Technical Skills</h2>
+          <p className="hint">
+            One group per box. Edit the group name and its comma-separated tags. Leave a
+            group&apos;s name blank to remove it. Add a new group using the box at the bottom.
+          </p>
+        </div>
+        <SavedBanner show={saved === "1"} />
+      </div>
 
       {skills.map((group) => (
         <div className="admin-group-box" key={group.id}>
@@ -28,7 +39,7 @@ export default async function SkillsPage() {
         </div>
       ))}
 
-      <div className="admin-group-box">
+      <div className="admin-group-box admin-group-box-new">
         <strong style={{ fontSize: "0.85rem" }}>+ Add new group</strong>
         <div className="admin-field" style={{ marginTop: "0.6rem" }}>
           <label>Group name</label>
@@ -40,9 +51,11 @@ export default async function SkillsPage() {
         </div>
       </div>
 
-      <button type="submit" className="admin-btn">
-        Save changes
-      </button>
+      <div className="admin-form-actions">
+        <button type="submit" className="admin-btn">
+          Save changes
+        </button>
+      </div>
     </form>
   );
 }

@@ -10,24 +10,19 @@ export default async function ExperienceListPage() {
 
   return (
     <div className="admin-card">
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "0.3rem",
-        }}
-      >
-        <h2>Experience</h2>
+      <div className="admin-card-head">
+        <div>
+          <h2>Experience</h2>
+          <p className="hint">Reorder, hide, edit or remove timeline entries.</p>
+        </div>
         <Link href="/admin/experience/new" className="admin-btn">
           + New entry
         </Link>
       </div>
-      <p className="hint">Reorder, hide, edit or remove timeline entries.</p>
 
       {sorted.map((entry, i) => (
         <div className="admin-exp-row" key={entry.id}>
-          <div>
+          <div className="title-block">
             <strong>{entry.title}</strong>
             {entry.hidden && <span className="badge">Hidden</span>}
             {entry.simulation && <span className="badge">Simulation style</span>}
@@ -39,8 +34,14 @@ export default async function ExperienceListPage() {
             <form action={moveExperience}>
               <input type="hidden" name="id" value={entry.id} />
               <input type="hidden" name="direction" value="up" />
-              <button type="submit" className="admin-btn secondary" disabled={i === 0}>
-                Up
+              <button
+                type="submit"
+                className="admin-btn secondary icon-only"
+                disabled={i === 0}
+                aria-label="Move up"
+                title="Move up"
+              >
+                &uarr;
               </button>
             </form>
             <form action={moveExperience}>
@@ -48,10 +49,12 @@ export default async function ExperienceListPage() {
               <input type="hidden" name="direction" value="down" />
               <button
                 type="submit"
-                className="admin-btn secondary"
+                className="admin-btn secondary icon-only"
                 disabled={i === sorted.length - 1}
+                aria-label="Move down"
+                title="Move down"
               >
-                Down
+                &darr;
               </button>
             </form>
             <form action={toggleExperienceHidden}>

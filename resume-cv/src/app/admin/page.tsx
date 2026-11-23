@@ -6,21 +6,39 @@ export const dynamic = "force-dynamic";
 export default async function AdminDashboard() {
   const content = await getContent();
   const visibleCount = content.experience.filter((e) => !e.hidden).length;
+  const hiddenCount = content.experience.length - visibleCount;
 
   return (
     <div className="admin-card">
-      <h2>Overview</h2>
-      <p className="hint">Quick summary of what&apos;s currently published on the live resume.</p>
-      <ul style={{ fontSize: "0.9rem", lineHeight: 1.9, paddingLeft: "1.2rem" }}>
-        <li>{content.skills.length} skill groups</li>
-        <li>{content.certsInProgress.length} in-progress certifications</li>
-        <li>{content.certifications.length} completed certifications</li>
-        <li>
-          {content.experience.length} experience entries ({visibleCount} visible,{" "}
-          {content.experience.length - visibleCount} hidden)
-        </li>
-      </ul>
-      <div style={{ marginTop: "1.2rem", display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
+      <div className="admin-card-head">
+        <div>
+          <h2>Overview</h2>
+          <p className="hint">Quick summary of what&apos;s currently published on the live resume.</p>
+        </div>
+      </div>
+
+      <div className="admin-stats-grid">
+        <Link href="/admin/skills" className="admin-stat-tile">
+          <span className="admin-stat-number">{content.skills.length}</span>
+          <span className="admin-stat-label">Skill groups</span>
+        </Link>
+        <Link href="/admin/certifications" className="admin-stat-tile">
+          <span className="admin-stat-number">{content.certsInProgress.length}</span>
+          <span className="admin-stat-label">In progress certs</span>
+        </Link>
+        <Link href="/admin/certifications" className="admin-stat-tile">
+          <span className="admin-stat-number">{content.certifications.length}</span>
+          <span className="admin-stat-label">Completed certs</span>
+        </Link>
+        <Link href="/admin/experience" className="admin-stat-tile">
+          <span className="admin-stat-number">{visibleCount}</span>
+          <span className="admin-stat-label">
+            Visible entries{hiddenCount > 0 ? ` (${hiddenCount} hidden)` : ""}
+          </span>
+        </Link>
+      </div>
+
+      <div className="admin-form-actions">
         <Link href="/admin/profile" className="admin-btn">
           Edit profile
         </Link>
