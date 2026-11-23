@@ -32,20 +32,10 @@ jobs:
             cd resume-cv
             for f in index.html error404.html styles.css script.js; do
               az storage blob upload \
-                --account-name resumefb \
+                --account-name resumefbcv \
                 --container-name '$web' \
                 --name "$f" \
                 --file "$f" \
                 --auth-mode login \
                 --overwrite
             done
-
-      - name: Purge Front Door cache
-        uses: azure/CLI@v2
-        with:
-          inlineScript: |
-            az afd endpoint purge \
-              --resource-group Lanraeee \
-              --profile-name fbresumeFDCDN \
-              --endpoint-name cv1 \
-              --content-paths "/*"
