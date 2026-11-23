@@ -1,21 +1,15 @@
-import { clerkMiddleware, createRouteMatcher, currentUser } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
-import { isAuthorizedAdminEmail } from "@/lib/admin-auth";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isProtectedRoute = createRouteMatcher(["/admin(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (!isProtectedRoute(req)) return;
-
   await auth.protect();
-
-  // Clerk sign-up is open by default - being signed in only proves someone
-  // has *a* Clerk account, not that they're the site owner. Gate /admin to
-  // an explicit email allowlist so a random sign-up can't reach the CMS.
-  const user = await currentUser();
-  if (!isAuthorizedAdminEmail(user?.primaryEmailAddress?.emailAddress)) {
-    return new NextResponse("Not authorized", { status: 403 });
-  }
+  // Email-allowlist check happens in the /admin layout (a Server Component)
+  // and in every Server Action instead of here: currentUser() inside
+  // clerkMiddleware intermittently loses request context under concurrent
+  // requests, surfacing as "auth() was called but Clerk can't detect usage
+  // of clerkMiddleware()" even though this middleware did run.
 });
 
 export const config = {
