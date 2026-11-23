@@ -1,14 +1,15 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { isAuthorizedAdminEmail } from "./admin-auth";
 import { getContent, newId, saveContent } from "./content";
 import type { ExperienceEntry, SkillGroup } from "./types";
 
 async function requireAdmin() {
-  const { userId } = await auth();
-  if (!userId) {
+  const user = await currentUser();
+  if (!isAuthorizedAdminEmail(user?.primaryEmailAddress?.emailAddress)) {
     redirect("/sign-in");
   }
 }
