@@ -9,8 +9,9 @@ export default clerkMiddleware(async (auth, req) => {
 });
 
 export const config = {
-  matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    "/(api|trpc)(.*)",
-  ],
+  // Scoped to /admin only: the public resume page must keep working even
+  // before Clerk keys are configured, and clerkMiddleware() throws hard in
+  // production the moment it runs without them (unlike `next dev`, which
+  // only warns) - so it must never run for "/".
+  matcher: ["/admin(.*)"],
 };
